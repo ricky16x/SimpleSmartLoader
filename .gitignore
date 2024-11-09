@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+fib
+loader
+prime
+sum
+
 # Object files
 *.o
 *.ko
