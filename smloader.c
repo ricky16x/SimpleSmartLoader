@@ -1,8 +1,8 @@
+#define _GNU_SOURCE
+#define XOPEN_SOURCE 700
 #include "loader.h"
 #include <signal.h>
 #include <errno.h>
-
-
 
 #define PAGE_SIZE 4096
 
@@ -81,11 +81,7 @@ void sigsegv_handler(int signum, siginfo_t *info, void *context) {
 }
 
 void cleanup_mapped_pages() {
-    for (int i = 0; i < address_index; i++) {
-        if (munmap(address[i], PAGE_SIZE) == -1) {
-            perror("munmap failed");
-        }
-    }
+    
 }
 
 void load_elf_header(char *exe) {
@@ -140,7 +136,7 @@ void load_and_execute() {
     // Find and execute entry point
     int entrypoint_segment = find_entrypoint();
     if (entrypoint_segment == -1) {
-        fprintf(stderr, "Error: Entry point is not within any program segment\n");
+        fprintf(stderr, "Error: Entry point outside program segment\n");
         exit(1);
     }
 
@@ -157,15 +153,13 @@ void load_and_execute() {
 void loader_cleanup() {
     free(ehdr);
     free(phdr);
-    cleanup_mapped_pages();
-}
-
-int main(int argc, char **argv) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <ELF file>\n", argv[0]);
-        exit(1);
+    for (int i = 0; i < address_index; i++) {
+        if (munmap(address[i], PAGE_SIZE) == -1) {
+            perror("munmap failed");
+        }
     }
-
+}
+void setup_signal_handler(){
     struct sigaction sa;
     sa.sa_sigaction = sigsegv_handler;
     sa.sa_flags = SA_SIGINFO;
@@ -173,7 +167,13 @@ int main(int argc, char **argv) {
         perror("sigaction failed");
         exit(1);
     }
-
+}
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <ELF file>\n", argv[0]);
+        exit(1);
+    }
+    setup_signal_handler();
     load_elf_header(argv[1]);
     load_and_execute();
     loader_cleanup();
