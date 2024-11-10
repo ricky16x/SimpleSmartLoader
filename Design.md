@@ -4,12 +4,11 @@
 The SimpleSmartLoader is an enhancement of the previous SimpleLoader, designed to load and execute 32-bit ELF executables. Unlike the original loader, which allocated all required segments upfront, the SimpleSmartLoader introduces lazy loading by handling page faults to dynamically load only the necessary memory segments during program execution. This smart approach is inspired by Linux's memory management, allowing efficient memory use and execution without preloading segments.
 
 ## Repository Link
-The complete implementation can be found on GitHub: [SimpleLoader-OS](https://github.com/WhiteR9se/SimpleLoader-OS)
-
-*Note*: The GitHub contribution details are the same as in SimpleLoader. Future assignments will reflect equal contribution with SSH access resolved.
+This is an enhancement to the previous SimpleLoader assignment of which the complete implementation can be found on GitHub: [SimpleLoader-OS](https://github.com/WhiteR9se/SimpleLoader-OS)
+This assignment can be found here on Github: [SimpleSmartLoader](https://github.com/ricky16x/SimpleSmartLoader)
 
 ## Team Members && Contribution Summary
-- **Karan Singh (2023270)**: Implemented ELF parsing, memory allocation via lazy loading, and page fault handling logic.
+- **Karan Kumar (2023270)**: Implemented ELF parsing, memory allocation via lazy loading, and page fault handling logic.
 - **Rounak Dey (2023449)**: Integrated error handling, segmentation fault interception, and implemented reporting mechanisms for page faults, page allocations, and internal fragmentation statistics.
 
 #### File Descriptions
